@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import * as fireBaseAdmin from 'firebase-admin';
 import {
   ProcessingError,
   ProcessingSuccess,

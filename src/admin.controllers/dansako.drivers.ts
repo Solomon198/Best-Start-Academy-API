@@ -1,4 +1,3 @@
-import * as firebaseAdmin from 'firebase-admin';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 import {
@@ -8,7 +7,6 @@ import {
 } from '../RequestStatus/status';
 import models from '../models/index';
 import Constants from '../constants/index';
-import firebasePaths from '../constants/firebasePaths';
 
 export async function searchDrivers(req: Request, res: Response) {
   try {
