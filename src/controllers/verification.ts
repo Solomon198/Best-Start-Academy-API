@@ -1,3 +1,5 @@
+/* eslint-disable */
+// @ts-nocheck
 import { Response, Request } from 'express';
 import * as moment from 'moment';
 import * as Twilio from 'twilio';
@@ -180,87 +182,88 @@ export async function SinchSMS(req: Request, res: Response) {
   //     console.log(error);
   //     return ProcessingError(res);
   //   }
-  // }
-  // export async function verifyCode(req: Request, res: Response) {
-  //   try {
-  //     const { pin, token } = req.body as { pin: string; token: string };
-  //     if (!pin || !token) return InvalidInputs(res);
-  //     let decode: NumverifyResponseType;
-  //     try {
-  //       decode = decodeJwtToken(token) as NumverifyResponseType;
-  //     } catch (e) {
-  //       return UnAuthorized(
-  //         res,
-  //         Constants.ResponseMessages.TOKEN_EXPIRE,
-  //       );
-  //     }
-  //     const { intlFormat } = decode;
-  //     const getDoc = await models.Verification.findOne({
-  //       phoneNumber: intlFormat,
-  //     });
-  //     let phoneNumber: string;
-  //     let vCode: string;
-  //     if (getDoc) {
-  //       phoneNumber = getDoc.phoneNumber;
-  //       vCode = getDoc.pin;
-  //     } else {
-  //       return UnAuthorized(res);
-  //     }
-  //     if (getDoc.pinTrialDuration) {
-  //       const now = new Date();
-  //       if (getDoc.pinTrialDuration > now) {
-  //         if (
-  //           getDoc.pinTrials >= Constants.Timers.MAX_PIN_TRIAL_ATTEMPTS
-  //         ) {
-  //           return MaxPinTrialExceeded(res);
-  //         }
-  //       }
-  //     }
-  //     if (intlFormat === phoneNumber && pin === vCode) {
-  //       const user = await models.Users.findOneAndUpdate(
-  //         { phoneNumber: intlFormat },
-  //         { $set: { isVerified: true } },
-  //         { useFindAndModify: false },
-  //       );
-  //       const driver = await models.Drivers.findOneAndUpdate(
-  //         { phoneNumber: intlFormat },
-  //         { $set: { isVerified: true } },
-  //         { useFindAndModify: false },
-  //       );
-  //       if (user) {
-  //         const objectifyBSON = user.toObject() as User;
-  //         const tokens = getTokens(objectifyBSON.userId as any);
-  //         const { accessToken } = tokens;
-  //         const { refreshToken } = tokens;
-  //         return ProcessingSuccess(res, {
-  //           accessToken,
-  //           refreshToken,
-  //           user,
-  //         });
-  //       }
-  //       if (driver) {
-  //         const objectifyBSON = driver.toJSON() as Driver;
-  //         const tokens = getTokens(objectifyBSON.userId as any);
-  //         const { accessToken } = tokens;
-  //         const { refreshToken } = tokens;
-  //         return ProcessingSuccess(res, {
-  //           accessToken,
-  //           refreshToken,
-  //           user: driver,
-  //         });
-  //       }
-  //       return UnAuthorized(
-  //         res,
-  //         Constants.ResponseMessages.INVALID_CREDENTIALS,
-  //       );
-  //     }
-  //     await getDoc.incrementPinTrial();
-  //     return UnAuthorized(
-  //       res,
-  //       Constants.ResponseMessages.INCORRECT_VERIFICATION_PIN,
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //     return ProcessingError(res);
-  //   }
+}
+
+export async function verifyCode(req: Request, res: Response) {
+  try {
+    const { pin, token } = req.body as { pin: string; token: string };
+    if (!pin || !token) return InvalidInputs(res);
+    let decode: NumverifyResponseType;
+    try {
+      decode = decodeJwtToken(token) as NumverifyResponseType;
+    } catch (e) {
+      return UnAuthorized(
+        res,
+        Constants.ResponseMessages.TOKEN_EXPIRE,
+      );
+    }
+    const { intlFormat } = decode;
+    const getDoc = await models.Verification.findOne({
+      phoneNumber: intlFormat,
+    });
+    let phoneNumber: string;
+    let vCode: string;
+    if (getDoc) {
+      phoneNumber = getDoc.phoneNumber;
+      vCode = getDoc.pin;
+    } else {
+      return UnAuthorized(res);
+    }
+    if (getDoc.pinTrialDuration) {
+      const now = new Date();
+      if (getDoc.pinTrialDuration > now) {
+        if (
+          getDoc.pinTrials >= Constants.Timers.MAX_PIN_TRIAL_ATTEMPTS
+        ) {
+          return MaxPinTrialExceeded(res);
+        }
+      }
+    }
+    if (intlFormat === phoneNumber && pin === vCode) {
+      const user = await models.Users.findOneAndUpdate(
+        { phoneNumber: intlFormat },
+        { $set: { isVerified: true } },
+        { useFindAndModify: false },
+      );
+      const driver = await models.Drivers.findOneAndUpdate(
+        { phoneNumber: intlFormat },
+        { $set: { isVerified: true } },
+        { useFindAndModify: false },
+      );
+      if (user) {
+        const objectifyBSON = user.toObject() as User;
+        const tokens = getTokens(objectifyBSON.userId as any);
+        const { accessToken } = tokens;
+        const { refreshToken } = tokens;
+        return ProcessingSuccess(res, {
+          accessToken,
+          refreshToken,
+          user,
+        });
+      }
+      if (driver) {
+        const objectifyBSON = driver.toJSON() as Driver;
+        const tokens = getTokens(objectifyBSON.userId as any);
+        const { accessToken } = tokens;
+        const { refreshToken } = tokens;
+        return ProcessingSuccess(res, {
+          accessToken,
+          refreshToken,
+          user: driver,
+        });
+      }
+      return UnAuthorized(
+        res,
+        Constants.ResponseMessages.INVALID_CREDENTIALS,
+      );
+    }
+    await getDoc.incrementPinTrial();
+    return UnAuthorized(
+      res,
+      Constants.ResponseMessages.INCORRECT_VERIFICATION_PIN,
+    );
+  } catch (error) {
+    console.log(error);
+    return ProcessingError(res);
+  }
 }
