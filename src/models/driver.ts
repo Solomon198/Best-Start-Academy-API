@@ -26,7 +26,7 @@ const Drivers: Schema = new Schema({
   driverLicense: { type: Schema.Types.String },
   taxiLicense: { type: Schema.Types.String },
   isAvailable: { type: Schema.Types.Boolean, default: true },
-  isActivated: { type: Schema.Types.Boolean, default: false },
+  isActivated: { type: Schema.Types.Boolean, default: true },
   isPicker: { type: Schema.Types.Boolean, default: true },
   applicationDeclined: { type: Schema.Types.Boolean, default: false },
   firstName: Schema.Types.String,

@@ -1,14 +1,14 @@
-import * as firebaseAdmin from "firebase-admin";
-import { Request, Response } from "express";
-import * as mongoose from "mongoose";
+import * as firebaseAdmin from 'firebase-admin';
+import { Request, Response } from 'express';
+import * as mongoose from 'mongoose';
 import {
   ProcessingError,
   ProcessingSuccess,
   SignUpSuccess,
-} from "../RequestStatus/status";
-import models from "../models/index";
-import Constants from "../constants/index";
-import firebasePaths from "../constants/firebasePaths";
+} from '../RequestStatus/status';
+import models from '../models/index';
+import Constants from '../constants/index';
+import firebasePaths from '../constants/firebasePaths';
 
 export async function searchDrivers(req: Request, res: Response) {
   try {
@@ -53,13 +53,6 @@ export async function disableAccount(req: Request, res: Response) {
       { userId },
       { accountDisabled: true },
     );
-    await firebaseAdmin
-      .firestore()
-      .collection(firebasePaths.DRIVERS)
-      .doc(userId)
-      .update({
-        accountDisabled: true,
-      });
 
     return ProcessingSuccess(res, {});
   } catch (e) {
@@ -75,13 +68,6 @@ export async function enableAccount(req: Request, res: Response) {
       { userId },
       { accountDisabled: false },
     );
-    await firebaseAdmin
-      .firestore()
-      .collection(firebasePaths.DRIVERS)
-      .doc(userId)
-      .update({
-        accountDisabled: false,
-      });
     return ProcessingSuccess(res, {});
   } catch (e) {
     return ProcessingError(res, e);
