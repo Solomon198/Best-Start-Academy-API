@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import * as fireBaseAdmin from 'firebase-admin';
 import {
   ProcessingError,
   ProcessingSuccess,
@@ -23,11 +24,24 @@ export default async function DashboardAnalytics(
     const cancelledDeliveries = await models.Parcel.find({
       parcelStatus: Constants.Enums.PARCEL_DELIVERY_CANCELLED,
     }).count();
+    const getActiveDelieveries = await fireBaseAdmin
+      .firestore()
+      .collection(Constants.Collections.ACTIVE_DELIVERIES)
+      .get();
+    const activeDeliveries = getActiveDelieveries.size;
 
     // show recent request for driver application
     const applications = await models.Drivers.find({
       isActivated: false,
     }).count();
+
+    // get environentVariables
+    const getEnv = await fireBaseAdmin
+      .firestore()
+      .collection(Constants.Collections.APP_VARIABLES)
+      .doc(Constants.Collections.VARIABLES_SUBCOLLECTION)
+      .get();
+    const environmentVariables = getEnv.data();
 
     const response = {
       drivers,
@@ -35,9 +49,9 @@ export default async function DashboardAnalytics(
       totalDeliveries,
       completedDeliveries,
       cancelledDeliveries,
-      activeDeliveries: [],
+      activeDeliveries,
       applications,
-      environmentVariables: [],
+      environmentVariables,
     };
 
     return ProcessingSuccess(res, response);

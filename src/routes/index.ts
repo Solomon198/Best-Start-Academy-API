@@ -1,13 +1,14 @@
-import login from "./login";
-import SignUp from "./signUp";
-import Verification from "./verification";
-import Token from "./token";
-import PasswordReset from "./resetPassword";
-import Parcel from "./parcel";
-import UpdateProfile from "./update.profile";
-import card from "./cards";
-import Admin from "./admin";
-import Resources from "./resources";
+import login from './login';
+import SignUp from './signUp';
+import Verification from './verification';
+import Token from './token';
+import PasswordReset from './resetPassword';
+import Parcel from './parcel';
+import UpdateProfile from './update.profile';
+import card from './cards';
+import Admin from './admin';
+import Resources from './resources';
+import Subjects from './subjects';
 
 export default {
   login,
@@ -20,4 +21,5 @@ export default {
   card,
   Admin,
   Resources,
+  Subjects,
 };
