@@ -22,6 +22,7 @@ const {
   ADMIN,
   RESOURCES,
   SUBJECTS,
+  RESULT,
 } = constants.RouteBase;
 // Application-Level Middleware
 const app = express();
@@ -44,5 +45,6 @@ app.use(UPDATE, routes.UpdateProfile);
 app.use(CARD, routes.card);
 app.use(RESOURCES, routes.Resources);
 app.use(SUBJECTS, routes.Subjects);
+app.use(RESULT, routes.Results);
 
 export default app;

@@ -1,18 +1,18 @@
-import { Request, Response } from 'express';
-import models from '../models/index';
+import { Request, Response } from "express";
+import models from "../models/index";
 import {
   ProcessingError,
   ProcessingSuccess,
   InvalidPassword,
   InvalidCredential,
-} from '../RequestStatus/status';
-import { sendPaystackRequest } from '../utills/utills';
+} from "../RequestStatus/status";
+import { sendPaystackRequest } from "../utills/utills";
 
 export default async function GetBanks(req: Request, res: Response) {
   try {
     const banks = await sendPaystackRequest({
-      method: 'GET',
-      url: 'https://api.paystack.co/bank',
+      method: "GET",
+      url: "https://api.paystack.co/bank",
     });
 
     return ProcessingSuccess(res, banks.data.data);
@@ -40,14 +40,14 @@ export async function AddCheckoutAccount(
       return InvalidPassword(res);
     }
     const createReciepient = await sendPaystackRequest({
-      method: 'POST',
-      url: 'https://api.paystack.co/transferrecipient',
+      method: "POST",
+      url: "https://api.paystack.co/transferrecipient",
       data: {
         account_number,
         account_name,
         bank_code,
-        type: 'nuban',
-        currency: 'NGN',
+        type: "nuban",
+        currency: "NGN",
       },
     });
     const { recipient_code, details } = createReciepient.data.data; // eslint-disable-line
@@ -80,8 +80,8 @@ export async function ConfirmAccountNumber(
   try {
     const { account_number, bank_code } = req.query; // eslint-disable-line
     const accountDetails = await sendPaystackRequest({
-      method: 'GET',
-      url: 'https://api.paystack.co/bank/resolve',
+      method: "GET",
+      url: "https://api.paystack.co/bank/resolve",
       params: {
         account_number,
         bank_code,
@@ -118,17 +118,17 @@ export async function DriverRequestWithDrawal(
     const getAccountDetails = await models.Wallet.findOne({ userId });
     if (!getAccountDetails) return ProcessingError(res);
     if (getAccountDetails.amount < parseFloat(amount)) {
-      return ProcessingError(res, 'Insufficient funds !!!');
+      return ProcessingError(res, "Insufficient funds !!!");
     }
 
     // initiate paystack transfer request
     // DONT DO THIS HERE MOVE TO WEBHOOK
     await sendPaystackRequest({
-      method: 'POST',
-      url: 'https://api.paystack.co/transfer',
+      method: "POST",
+      url: "https://api.paystack.co/transfer",
       data: {
-        source: 'balance',
-        reason: 'Driver withdrawals',
+        source: "balance",
+        reason: "Driver withdrawals",
         amount: parseFloat(amount) * 100,
         recipient: getAccountDetails.recipient_code,
       },

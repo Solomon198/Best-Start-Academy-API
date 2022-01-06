@@ -1,13 +1,14 @@
-import Users from './Users';
-import Verification from './Verification';
-import ExpressBruteModel from './bruteSchema';
-import Parcel from './parcel';
-import Drivers from './driver';
-import Cards from './cards';
-import Wallet from './wallet';
-import TransactionHistory from './transaction.history';
-import DebtManager from './debt.manager';
-import Subject from './subjects';
+import Users from "./Users";
+import Verification from "./Verification";
+import ExpressBruteModel from "./bruteSchema";
+import Parcel from "./parcel";
+import Drivers from "./driver";
+import Cards from "./cards";
+import Wallet from "./wallet";
+import TransactionHistory from "./transaction.history";
+import DebtManager from "./debt.manager";
+import Subject from "./subjects";
+import Result from "./result";
 
 export default {
   Users,
@@ -20,4 +21,5 @@ export default {
   TransactionHistory,
   DebtManager,
   Subject,
+  Result,
 };

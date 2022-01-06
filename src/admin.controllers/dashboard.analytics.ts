@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 // import * as fireBaseAdmin from 'firebase-admin';
 import {
   ProcessingError,
   ProcessingSuccess,
-} from '../RequestStatus/status';
-import models from '../models/index';
+} from "../RequestStatus/status";
+import models from "../models/index";
 // import Constants from '../constants/index';
 
 export default async function DashboardAnalytics(

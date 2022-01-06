@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
-import * as bcrypt from 'bcryptjs';
-import * as moment from 'moment';
-import * as mongoosePagination from 'mongoose-paginate';
-import User from '../Types/user';
-import Constants from '../constants/index';
+import { Schema, model } from "mongoose";
+import * as bcrypt from "bcryptjs";
+import * as moment from "moment";
+import * as mongoosePagination from "mongoose-paginate";
+import User from "../Types/user";
+import Constants from "../constants/index";
 
 const Users = new Schema({
   userId: Schema.Types.String,
@@ -19,11 +19,11 @@ const Users = new Schema({
   isPicker: { type: Schema.Types.Boolean, default: false },
   firtName: Schema.Types.String,
   lastName: Schema.Types.String,
-  gender: { type: Schema.Types.String, enum: ['male', 'female'] },
+  gender: { type: Schema.Types.String, enum: ["male", "female"] },
   accountType: {
     type: Schema.Types.String,
-    default: 'admin',
-    enum: ['admin', 'super-admin'],
+    default: "admin",
+    enum: ["admin", "super-admin"],
   },
   isVerified: {
     type: Boolean,
@@ -38,10 +38,10 @@ const Users = new Schema({
 });
 
 Users.index({
-  phoneNumber: 'text',
-  firtName: 'text',
-  lastName: 'text',
-  localPhoneNumber: 'text',
+  phoneNumber: "text",
+  firtName: "text",
+  lastName: "text",
+  localPhoneNumber: "text",
 });
 
 Users.methods.setPassword = function setPassword(password) {
@@ -72,13 +72,13 @@ Users.methods.lockAccount = async function lockAccount() {
     if (documents.loginAttempts >= Constants.Timers.LOGIN_ATTEMPTS) {
       documents.tillUnlocked = moment(new Date()).add(
         Constants.Timers.UNITLL_UNBLOCK_DURATION,
-        'minutes',
+        "minutes",
       );
     }
   } else {
     documents.attemptsDuration = moment(new Date()).add(
       Constants.Timers.DURATION_TO_FAIL_ATTEMPTS,
-      'minutes',
+      "minutes",
     );
     documents.loginAttempts = 1;
   }
@@ -94,4 +94,4 @@ Users.methods.validatePassword = function validatePassword(password) {
 
 Users.plugin(mongoosePagination);
 
-export default model<User>('Users', Users);
+export default model<User>("Users", Users);

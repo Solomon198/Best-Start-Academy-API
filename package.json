@@ -15,7 +15,7 @@
     "compile:tsc:watch": "yarn run tsc -w",
     "db:start": "mongod --port 27017 --dbpath /var/lib/mongodb/parcel-delivery",
     "compile:tsc": "yarn run tsc ",
-    "start:dev:watch": "yarn compile:tsc && yarn lint:fix &&  yarn run concurrently \"yarn start:dev:server\" \"yarn compile:tsc:watch\" \"yarn prettier-watch\" ",
+    "dev": "yarn compile:tsc && yarn lint:fix &&  yarn run concurrently \"yarn start:dev:server\" \"yarn compile:tsc:watch\" \"yarn prettier-watch\" ",
     "doc": "apidoc -i src/doc/ -o api-doc/ --template ./doc-template",
     "doc:watch": "nodemon --watch lib/doc --exec yarn doc"
   },

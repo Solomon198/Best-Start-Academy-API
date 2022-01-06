@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
-import * as bcrypt from 'bcryptjs';
-import * as moment from 'moment';
-import * as mongoosePagination from 'mongoose-paginate';
-import Driver from '../Types/driver';
-import Constants from '../constants/index';
+import { Schema, model } from "mongoose";
+import * as bcrypt from "bcryptjs";
+import * as moment from "moment";
+import * as mongoosePagination from "mongoose-paginate";
+import Driver from "../Types/driver";
+import Constants from "../constants/index";
 
 const GuarrantorInformation = new Schema({
   fullName: { type: Schema.Types.String },
@@ -31,10 +31,10 @@ const Drivers: Schema = new Schema({
   applicationDeclined: { type: Schema.Types.Boolean, default: false },
   firstName: Schema.Types.String,
   lastName: Schema.Types.String,
-  gender: { type: Schema.Types.String, enum: ['male', 'female'] },
+  gender: { type: Schema.Types.String, enum: ["male", "female"] },
   accountType: {
     type: Schema.Types.String,
-    default: 'driver',
+    default: "driver",
   },
   isVerified: {
     type: Boolean,
@@ -50,10 +50,10 @@ const Drivers: Schema = new Schema({
 });
 
 Drivers.index({
-  phoneNumber: 'text',
-  firstName: 'text',
-  lastName: 'text',
-  localPhoneNumber: 'text',
+  phoneNumber: "text",
+  firstName: "text",
+  lastName: "text",
+  localPhoneNumber: "text",
 });
 
 Drivers.methods.setPassword = function setPassword(password) {
@@ -84,13 +84,13 @@ Drivers.methods.lockAccount = async function lockAccount() {
     if (documents.loginAttempts >= Constants.Timers.LOGIN_ATTEMPTS) {
       documents.tillUnlocked = moment(new Date()).add(
         Constants.Timers.UNITLL_UNBLOCK_DURATION,
-        'minutes',
+        "minutes",
       );
     }
   } else {
     documents.attemptsDuration = moment(new Date()).add(
       Constants.Timers.DURATION_TO_FAIL_ATTEMPTS,
-      'minutes',
+      "minutes",
     );
     documents.loginAttempts = 1;
   }
@@ -108,4 +108,4 @@ Drivers.methods.validatePassword = function validatePassword(
 
 Drivers.plugin(mongoosePagination);
 
-export default model<Driver>('Drivers', Drivers);
+export default model<Driver>("Drivers", Drivers);

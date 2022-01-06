@@ -1,22 +1,22 @@
-import { Request, Response } from 'express';
-import { firestore } from 'firebase-admin';
+import { Request, Response } from "express";
+import { firestore } from "firebase-admin";
 import {
   InvalidRequest,
   ProcessingError,
   ProcessingSuccess,
-} from '../RequestStatus/status';
-import Constants from '../constants/index';
-import { Parcel } from '../Types/parcel';
+} from "../RequestStatus/status";
+import Constants from "../constants/index";
+import { Parcel } from "../Types/parcel";
 
 import {
   chargeUserAuthorization,
   sendNotification,
-} from '../utills/utills';
-import { TransactionType } from '../constants/enums';
-import models from '../models/index';
-import Card from '../Types/card';
+} from "../utills/utills";
+import { TransactionType } from "../constants/enums";
+import models from "../models/index";
+import Card from "../Types/card";
 
-require('dotenv/config');
+require("dotenv/config");
 
 // the middleware handles lot of stuffs that should have been done here
 export async function CreateParcel(req: Request, res: Response) {
@@ -49,15 +49,15 @@ export async function CreateParcel(req: Request, res: Response) {
       // send notification to user for parcel creation
       if (user) {
         await sendNotification(
-          'Dansako - Parcel Created',
-          'You can cancel parcel delivery as long as parcel is not picked up by driver',
+          "Dansako - Parcel Created",
+          "You can cancel parcel delivery as long as parcel is not picked up by driver",
           user.token,
         );
       }
 
       if (driver) {
         await sendNotification(
-          'Dansako - New Delivery',
+          "Dansako - New Delivery",
           `${user?.firtName || user?.firstName} ${
             user?.lastName
           } has requested you pick up a parcel, you make a call to confirm pick up location`,
@@ -100,8 +100,8 @@ export async function ParcelPicked(req: Request, res: Response) {
     if (user) {
       try {
         await sendNotification(
-          'Dansako - Parcel Picked',
-          'parcel have been picked up. you will get notified when parcel is at your location',
+          "Dansako - Parcel Picked",
+          "parcel have been picked up. you will get notified when parcel is at your location",
           user.token,
         );
       } catch (e) {
@@ -138,8 +138,8 @@ export async function ParcelDelivered(req: Request, res: Response) {
     if (user) {
       try {
         await sendNotification(
-          'Dansako - Parcel have been delivered',
-          'parcel have been delivered, please confirm that parcel is been delivered',
+          "Dansako - Parcel have been delivered",
+          "parcel have been delivered, please confirm that parcel is been delivered",
           user.token,
         );
       } catch (e) {
@@ -216,10 +216,10 @@ export async function ConfirmDelivery(req: Request, res: Response) {
       if (platformCharges >= 50 && cardInfo) {
         authorization = cardInfo.authorization;
         email = cardInfo.email;
-        let chargeStatus = '';
+        let chargeStatus = "";
         let transaction: any;
 
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === "production") {
           const chargeDriver = await chargeUserAuthorization(
             email,
             platformCharges,
@@ -228,10 +228,10 @@ export async function ConfirmDelivery(req: Request, res: Response) {
           transaction = chargeDriver;
           chargeStatus = chargeDriver.data.data.status;
         } else {
-          chargeStatus = 'failed';
+          chargeStatus = "failed";
         }
 
-        if (chargeStatus === 'success') {
+        if (chargeStatus === "success") {
           const {
             paid_at, // eslint-disable-line
             amount,
@@ -240,7 +240,7 @@ export async function ConfirmDelivery(req: Request, res: Response) {
           const newTransactionHistory = new models.TransactionHistory(
             {
               user: finishData.parcelPicker,
-              status: 'success',
+              status: "success",
               driver: finishData.parcelPicker,
               amount: amount / 100,
               parcel: [finishData._id], // eslint-disable-line
@@ -290,9 +290,9 @@ export async function ConfirmDelivery(req: Request, res: Response) {
 
       const tripPrice = rideMoney - outstanding;
       if (tripPrice >= 5000) {
-        let paymentVerificationStatus = '';
+        let paymentVerificationStatus = "";
         let transaction: any;
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === "production") {
           const verifyPayment = await chargeUserAuthorization(
             email,
             tripPrice,
@@ -302,11 +302,11 @@ export async function ConfirmDelivery(req: Request, res: Response) {
           paymentVerificationStatus = verifyPayment.data.data.status;
         }
 
-        if (paymentVerificationStatus === 'success') {
+        if (paymentVerificationStatus === "success") {
           const newTransactionHistory = new models.TransactionHistory(
             {
               user: finishData.parcelPicker,
-              status: 'success',
+              status: "success",
               driver: finishData.parcelPicker,
               amount: transaction.data.data.amount / 100,
               parcel: [finishData._id], // eslint-disable-line
@@ -348,8 +348,8 @@ export async function ConfirmDelivery(req: Request, res: Response) {
         const driverTokens = driver ? driver.token : [];
         const userTokens = user ? user.token : [];
         sendNotification(
-          'Dansako - Delivery Confirmed',
-          'Parcel devlivery have been confirmed successfully !!! ',
+          "Dansako - Delivery Confirmed",
+          "Parcel devlivery have been confirmed successfully !!! ",
           [...driverTokens, ...userTokens],
         );
       }
@@ -423,7 +423,7 @@ export async function ParcelDeliveryCancelled(
       if (!isDriver) {
         if (driver) {
           sendNotification(
-            'Dansako - Delivery Cancelled',
+            "Dansako - Delivery Cancelled",
             `Delivery have been cancelled by ${user?.firstName} ${user?.lastName}`,
             driver.token,
           );
@@ -432,8 +432,8 @@ export async function ParcelDeliveryCancelled(
 
       if (user) {
         sendNotification(
-          'Dansako - Delivery Cancelled',
-          'Delivery have been cancelled by driver',
+          "Dansako - Delivery Cancelled",
+          "Delivery have been cancelled by driver",
           user.token,
         );
       }
@@ -458,7 +458,7 @@ export async function fetchUserParcels(req: Request, res: Response) {
         limit: Constants.UtilsConstants.QUERY_BADGE_SIZE,
         page,
         populate: {
-          path: 'parcelPicker',
+          path: "parcelPicker",
         },
         sort: { date: -1 },
       },
@@ -485,7 +485,7 @@ export async function fetchDriverParcels(
         page,
         sort: { date: -1 },
         populate: {
-          path: 'parcelOwner',
+          path: "parcelOwner",
         },
       },
     );

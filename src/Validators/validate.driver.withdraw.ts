@@ -1,16 +1,16 @@
-import * as joi from 'joi';
-import { Request, Response, NextFunction } from 'express';
+import * as joi from "joi";
+import { Request, Response, NextFunction } from "express";
 import {
   InvalidInputs,
   ProcessingError,
-} from '../RequestStatus/status';
+} from "../RequestStatus/status";
 
 const requestBodySchema = joi.object({
   amount: joi
     .number()
     .min(1000)
     .required()
-    .label('Withdrawal Amount'),
+    .label("Withdrawal Amount"),
   userId: joi.string().required(),
 });
 

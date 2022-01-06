@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import * as mongoose from 'mongoose';
+import { Request, Response } from "express";
+import * as mongoose from "mongoose";
 import {
   ProcessingError,
   ProcessingSuccess,
   SignUpSuccess,
-} from '../RequestStatus/status';
-import models from '../models/index';
-import Constants from '../constants/index';
+} from "../RequestStatus/status";
+import models from "../models/index";
+import Constants from "../constants/index";
 
 export async function searchDrivers(req: Request, res: Response) {
   try {

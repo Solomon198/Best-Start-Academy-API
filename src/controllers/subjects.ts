@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 import {
   ProcessingError,
   ProcessingSuccess,
-} from '../RequestStatus/status';
-import models from '../models/index';
+} from "../RequestStatus/status";
+import models from "../models/index";
 
 export async function CreateSubject(req: Request, res: Response) {
   try {
